@@ -1,4 +1,3 @@
-const technician = require('./technician');
 const express = require('express');
 
 const router = express();
@@ -10,7 +9,6 @@ const Database = require('./database');
 
 router.use(bodyParser.urlencoded({ extended: false }));
 router.use(bodyParser.json());
-router.use('/technician',technician);
 router.use(cors());
 
 var postgres = new Database();
@@ -336,6 +334,54 @@ router.put('/approveAppointments', (req, res, next) => {
             debugger;
             res.status(201).json({
                 message: 'Successfully Updated user',
+                addedUser: data
+            });
+            resolve(data);
+
+        })
+        .catch((error) => {
+            debugger;
+            res.status(500).json({
+                message: 'bad Request',
+                error: error,
+                status: false
+            });
+            reject(error);
+        })
+    })
+});
+
+//TECHNICIAN UPDATE APPOINTMENT =================================================================================
+router.patch('/updateAppointments', (req, res, next) => {
+    res.header("Access-Control-Allow-Origin","*");
+    res.header("Access-Control_Allow-Headers","Origin,X-Requested-With,Content-Type,Accept");
+
+    debugger;
+    return new Promise((resolve, reject) => {
+        let placeholder = '';
+        let count = 1;
+        const params = Object.keys(req.body).map(key => [(key), req.body[key]]);
+
+        const paramsValues = Object.keys(req.body).map(key => req.body[key]);
+
+        if (Array.isArray(params)) {
+            params.forEach(() => {
+                placeholder += `$${count},`;
+                count += 1;
+            });
+        } 
+
+        placeholder = placeholder.replace(/,\s*$/, ''); 
+
+        const functionName = `online_book.fn_appointment_update`;
+
+        const sql = `${functionName}(${placeholder})`;
+
+        postgres.callFnWithResultsAdd(sql, paramsValues)
+        .then((data) => {
+            debugger;
+            res.status(201).json({
+                message: 'Successfully Updated Appointment',
                 addedUser: data
             });
             resolve(data);
