@@ -238,8 +238,8 @@ router.post('/inspectionAdd/', (req, res, next) => {
         .then((data) => {
             debugger;
             res.status(201).json({
-                message: 'Successfully Added user',
-                addedUser: data
+                message: 'Inspection added',
+                inspection: data
             });
             resolve(data);
 
@@ -304,7 +304,7 @@ router.post('/addNewAppointment/', (req, res, next) => {
 });
 //================================================================================================================
 //TECHNICIAN APPROVE APPOINTMENTS=================================================================================
-router.put('/approveAppointments', (req, res, next) => {
+router.patch('/approveAppointments', (req, res, next) => {
     res.header("Access-Control-Allow-Origin","*");
     res.header("Access-Control_Allow-Headers","Origin,X-Requested-With,Content-Type,Accept");
 
@@ -352,7 +352,7 @@ router.put('/approveAppointments', (req, res, next) => {
 });
 
 //TECHNICIAN UPDATE APPOINTMENT =================================================================================
-router.patch('/updateAppointments', (req, res, next) => {
+router.patch('/updateAppointments/', (req, res, next) => {
     res.header("Access-Control-Allow-Origin","*");
     res.header("Access-Control_Allow-Headers","Origin,X-Requested-With,Content-Type,Accept");
 
