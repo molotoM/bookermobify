@@ -9,39 +9,10 @@ const Database = require('./database');
 router.use(bodyParser.urlencoded({ extended: false }));
 router.use(bodyParser.json());
 router.use(cors());
-
+var postgres = new Database();
 
 //Get BYS=================================================================================================
 router.get('/', (req, res) => res.send('Hello World!'))
-//GET BY CLIENT IDENTITY NUMBER=========================================================================
-router.get('/getIdNumber/:userId', (req, res, next) => {
-    var postgres = new Database();
-
-    res.header("Access-Control-Allow-Origin","*");
-    res.header("Access-Control_Allow-Headers","Origin,X-Requested-With,Content-Type,Accept");
-
-    const functionName = `public.fn_user_get_by_id('${req.params.userId}')`;
-
-        postgres.callFnWithResultsById(functionName)  
-            .then((data) => {
-                res.status(200).json({
-                    message: 'You discovered the ID',
-                    user: data,
-                    status: true
-                });
-            })
-            .catch((error => {
-            debugger;
-                console.log(error);
-                res.status(500).json({
-                    message: 'bad Request',
-                    error: error,
-                    status: false
-                });
-            }))
-
-});
-
 //GET BY CLIENT NUMBER=========================================================================
 router.get('/getUserId/:userId', (req, res, next) => {
     debugger;
@@ -60,6 +31,35 @@ router.get('/getUserId/:userId', (req, res, next) => {
             })
             .catch((error => {
                 debugger;
+                console.log(error);
+                res.status(500).json({
+                    message: 'bad Request',
+                    error: error,
+                    status: false
+                });
+            }))
+
+});
+
+//GET BY CLIENT IDENTITY NUMBER=========================================================================
+router.get('/getIdNumber/:userId', (req, res, next) => {
+    
+
+    res.header("Access-Control-Allow-Origin","*");
+    res.header("Access-Control_Allow-Headers","Origin,X-Requested-With,Content-Type,Accept");
+
+    const functionName = `public.fn_user_get_by_id('${req.params.userId}')`;
+
+        postgres.callFnWithResultsById(functionName)  
+            .then((data) => {
+                res.status(200).json({
+                    message: 'You discovered the ID',
+                    user: data,
+                    status: true
+                });
+            })
+            .catch((error => {
+            debugger;
                 console.log(error);
                 res.status(500).json({
                     message: 'bad Request',
@@ -96,6 +96,7 @@ router.get('/getClientAppointments/:userId', (req, res, next) => {
             }))
 
 });
+
 //GET APPOINTMENTS FOR A TECHICIAN=========================================================================
 router.get('/techAppointments/:userId', (req, res, next) => {
 
