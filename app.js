@@ -6,22 +6,21 @@ const bodyParser = require('body-parser');
 
 const Database = require('./database');
 
-
 router.use(bodyParser.urlencoded({ extended: false }));
 router.use(bodyParser.json());
 router.use(cors());
 
-var postgres = new Database();
-
 
 //Get BYS=================================================================================================
+router.get('/', (req, res) => res.send('Hello World!'))
 //GET BY CLIENT IDENTITY NUMBER=========================================================================
 router.get('/getIdNumber/:userId', (req, res, next) => {
+    var postgres = new Database();
 
     res.header("Access-Control-Allow-Origin","*");
     res.header("Access-Control_Allow-Headers","Origin,X-Requested-With,Content-Type,Accept");
 
-    const functionName = `online_book.fn_user_get_by_id(${req.params.userId})`;
+    const functionName = `public.fn_user_get_by_id('${req.params.userId}')`;
 
         postgres.callFnWithResultsById(functionName)  
             .then((data) => {
@@ -32,7 +31,7 @@ router.get('/getIdNumber/:userId', (req, res, next) => {
                 });
             })
             .catch((error => {
-                debugger;
+            debugger;
                 console.log(error);
                 res.status(500).json({
                     message: 'bad Request',
@@ -45,11 +44,11 @@ router.get('/getIdNumber/:userId', (req, res, next) => {
 
 //GET BY CLIENT NUMBER=========================================================================
 router.get('/getUserId/:userId', (req, res, next) => {
-
+    debugger;
     res.header("Access-Control-Allow-Origin","*");
     res.header("Access-Control_Allow-Headers","Origin,X-Requested-With,Content-Type,Accept");
 
-    const functionName = `online_book.fn_vehicle_get_by_id (${req.params.userId})`;
+    const functionName = `public.fn_vehicle_get_by_id (${req.params.userId})`;
 
         postgres.callFnWithResultsById(functionName)  
             .then((data) => {
@@ -76,7 +75,7 @@ router.get('/getClientAppointments/:userId', (req, res, next) => {
     res.header("Access-Control-Allow-Origin","*");
     res.header("Access-Control_Allow-Headers","Origin,X-Requested-With,Content-Type,Accept");
 
-    const functionName = `online_book.fn_get_client_app(${req.params.userId})`;
+    const functionName = `public.fn_get_client_app(${req.params.userId})`;
 
         postgres.callFnWithResultsById(functionName)  
             .then((data) => {
@@ -103,7 +102,7 @@ router.get('/techAppointments/:userId', (req, res, next) => {
     res.header("Access-Control-Allow-Origin","*");
     res.header("Access-Control_Allow-Headers","Origin,X-Requested-With,Content-Type,Accept");
 
-    const functionName = `online_book.fn_get_all_appointments(${req.params.userId})`;
+    const functionName = `public.fn_get_all_appointments(${req.params.userId})`;
 
         postgres.callFnWithResultsById(functionName)  
             .then((data) => {
@@ -133,7 +132,7 @@ router.get('/getRequestedApp', (req, res,next) => {
    
  debugger;
 
-    const functionName = `online_book.fn_get_unapproved_appointments`;
+    const functionName = `public.fn_get_unapproved_appointments`;
 
     return new Promise((resolve, reject) => {
 
@@ -183,7 +182,7 @@ router.post('/addNewUser/', (req, res, next) => {
 
         placeholder = placeholder.replace(/,\s*$/, ''); 
 
-        const functionName = `online_book.fn_user_add`;
+        const functionName = `public.fn_user_add`;
 
         const sql = `${functionName}(${placeholder})`;
 
@@ -230,7 +229,7 @@ router.post('/inspectionAdd/', (req, res, next) => {
 
         placeholder = placeholder.replace(/,\s*$/, ''); 
 
-        const functionName = `online_book.fn_inspection_new_add`;
+        const functionName = `public.fn_inspection_new_add`;
 
         const sql = `${functionName}(${placeholder})`;
 
@@ -277,7 +276,7 @@ router.post('/addNewAppointment/', (req, res, next) => {
 
         placeholder = placeholder.replace(/,\s*$/, ''); 
 
-        const functionName = `online_book.fn_appointment_new_add`;
+        const functionName = `public.fn_appointment_new_add`;
 
         const sql = `${functionName}(${placeholder})`;
 
@@ -325,7 +324,7 @@ router.patch('/approveAppointments', (req, res, next) => {
 
         placeholder = placeholder.replace(/,\s*$/, ''); 
 
-        const functionName = `online_book.fn_appointment_approve`;
+        const functionName = `public.fn_appointment_approve`;
 
         const sql = `${functionName}(${placeholder})`;
 
@@ -373,7 +372,7 @@ router.patch('/updateAppointments/', (req, res, next) => {
 
         placeholder = placeholder.replace(/,\s*$/, ''); 
 
-        const functionName = `online_book.fn_appointment_update`;
+        const functionName = `public.fn_appointment_update`;
 
         const sql = `${functionName}(${placeholder})`;
 

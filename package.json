@@ -1,11 +1,12 @@
 {
   "name": "online_booking",
   "version": "1.0.0",
-  "description": "",
-  "main": "./node_files/server.js",
+  "description": " ",
+  "main": "./server.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "nodemon server.js"
+    "dev": "nodemon server.js",
+    "start": "node server.js"
   },
   "author": "Moloto",
   "license": "ISC",
@@ -15,6 +16,17 @@
     "express": "^4.17.1",
     "node-static": "^0.7.11",
     "nodemon": "^2.0.6",
-    "pg": "^8.5.1"
-  }
+    "pg": "^8.5.1",
+    "sequelize": "^6.3.5"
+  },
+  "devDependencies": {},
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/molotoM/bookermobify.git"
+  },
+  "keywords": [],
+  "bugs": {
+    "url": "https://github.com/molotoM/bookermobify/issues"
+  },
+  "homepage": "https://github.com/molotoM/bookermobify#readme"
 }
