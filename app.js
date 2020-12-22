@@ -97,33 +97,7 @@ router.get('/getClientAppointments/:userId', (req, res, next) => {
 
 });
 
-//GET All CILENT CARS=========================================================================
-router.get('/clientCars/:userId', (req, res, next) => {
 
-    res.header("Access-Control-Allow-Origin","*");
-    res.header("Access-Control_Allow-Headers","Origin,X-Requested-With,Content-Type,Accept");
-
-    const functionName = `fn_view_all_client_vehicle(${req.params.userId})`;
-
-        postgres.callFnWithResultsById(functionName)  
-            .then((data) => {
-                res.status(200).json({
-                    message: 'You discovered a Car',
-                    user: data,
-                    status: true
-                });
-            })
-            .catch((error => {
-                debugger;
-                console.log(error);
-                res.status(500).json({
-                    message: 'bad Request',
-                    error: error,
-                    status: false
-                });
-            }))
-
-});
 //GET APPOINTMENTS FOR A TECHICIAN=========================================================================
 router.get('/techAppointments/:userId', (req, res, next) => {
 
@@ -184,6 +158,31 @@ router.get('/getRequestedApp', (req, res,next) => {
             }))
 
     })
+});
+
+//GET ALL LOGGED IN USER INFORMATION =========================================================================
+router.get('/getUserInfo', (req, res,next) => {
+    res.header("Access-Control-Allow-Origin","*");
+    res.header("Access-Control_Allow-Headers","Origin,X-Requested-With,Content-Type,Accept");
+
+    const functionName = `fn_user_get_by_user_id(${req.params.userId})`;
+
+        postgres.callFnWithResultsById(functionName)  
+            .then((data) => {
+                res.status(200).json({
+                    user: data,
+                    status: true
+                });
+            })
+            .catch((error => {
+                debugger;
+                console.log(error);
+                res.status(500).json({
+                    error: error,
+                    status: false
+                });
+            }))
+
 });
 //================================================================================================================
 //REGISTER USERS========================================================================================
@@ -469,7 +468,6 @@ router.patch('/approveAppointments', (req, res, next) => {
         })
     })
 });
-
 //TECHNICIAN UPDATE APPOINTMENT =================================================================================
 router.patch('/updateAppointments/', (req, res, next) => {
     res.header("Access-Control-Allow-Origin","*");
@@ -501,6 +499,54 @@ router.patch('/updateAppointments/', (req, res, next) => {
             debugger;
             res.status(201).json({
                 message: 'Successfully Updated Appointment',
+                addedUser: data
+            });
+            resolve(data);
+
+        })
+        .catch((error) => {
+            debugger;
+            res.status(500).json({
+                message: 'bad Request',
+                error: error,
+                status: false
+            });
+            reject(error);
+        })
+    })
+});
+
+//UPDATE USER INFORMATION=================================================================================
+router.patch('/updateUser/', (req, res, next) => {
+    res.header("Access-Control-Allow-Origin","*");
+    res.header("Access-Control_Allow-Headers","Origin,X-Requested-With,Content-Type,Accept");
+
+    debugger;
+    return new Promise((resolve, reject) => {
+        let placeholder = '';
+        let count = 1;
+        const params = Object.keys(req.body).map(key => [(key), req.body[key]]);
+
+        const paramsValues = Object.keys(req.body).map(key => req.body[key]);
+
+        if (Array.isArray(params)) {
+            params.forEach(() => {
+                placeholder += `$${count},`;
+                count += 1;
+            });
+        } 
+
+        placeholder = placeholder.replace(/,\s*$/, ''); 
+
+        const functionName = `fn_user_update`;
+
+        const sql = `${functionName}(${placeholder})`;
+
+        postgres.callFnWithResultsAdd(sql, paramsValues)
+        .then((data) => {
+            debugger;
+            res.status(201).json({
+                message: 'Successfully Updated user',
                 addedUser: data
             });
             resolve(data);
