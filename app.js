@@ -255,6 +255,100 @@ router.post('/inspectionAdd/', (req, res, next) => {
         })
     })
 });
+
+//REQUEST INSPECTION========================================================================================
+router.post('/bookInspection/', (req, res, next) => {
+    res.header("Access-Control-Allow-Origin","*");
+    res.header("Access-Control_Allow-Headers","Origin,X-Requested-With,Content-Type,Accept");
+
+    debugger;
+    return new Promise((resolve, reject) => {
+        let placeholder = '';
+        let count = 1;
+        const params = Object.keys(req.body).map(key => [(key), req.body[key]]);
+
+        const paramsValues = Object.keys(req.body).map(key => req.body[key]);
+
+        if (Array.isArray(params)) {
+            params.forEach(() => {
+                placeholder += `$${count},`;
+                count += 1;
+            });
+        } 
+
+        placeholder = placeholder.replace(/,\s*$/, ''); 
+
+        const functionName = `fn_book_inspection`;
+
+        const sql = `${functionName}(${placeholder})`;
+
+        postgres.callFnWithResultsAdd(sql, paramsValues)
+        .then((data) => {
+            debugger;
+            res.status(201).json({
+                message: 'Successfully Added user',
+                adddInspection: data
+            });
+            resolve(data);
+
+        })
+        .catch((error) => {
+            debugger;
+            res.status(500).json({
+                message: 'bad Request',
+                error: error,
+            });
+            reject(error);
+        })
+    })
+});
+//FILL IN INSEPECTION ========================================================================================
+router.post('/inspectionAdd/', (req, res, next) => {
+    res.header("Access-Control-Allow-Origin","*");
+    res.header("Access-Control_Allow-Headers","Origin,X-Requested-With,Content-Type,Accept");
+
+    debugger;
+    return new Promise((resolve, reject) => {
+        let placeholder = '';
+        let count = 1;
+        const params = Object.keys(req.body).map(key => [(key), req.body[key]]);
+
+        const paramsValues = Object.keys(req.body).map(key => req.body[key]);
+
+        if (Array.isArray(params)) {
+            params.forEach(() => {
+                placeholder += `$${count},`;
+                count += 1;
+            });
+        } 
+
+        placeholder = placeholder.replace(/,\s*$/, ''); 
+
+        const functionName = `public.fn_inspection_new_add`;
+
+        const sql = `${functionName}(${placeholder})`;
+
+        postgres.callFnWithResultsAdd(sql, paramsValues)
+        .then((data) => {
+            debugger;
+            res.status(201).json({
+                message: 'Inspection added',
+                inspection: data
+            });
+            resolve(data);
+
+        })
+        .catch((error) => {
+            debugger;
+            res.status(500).json({
+                message: 'bad Request',
+                error: error,
+                status: false
+            });
+            reject(error);
+        })
+    })
+});
 //POST A NEW INSTALLATION===========================================================================
 router.post('/addNewAppointment/', (req, res, next) => {
     res.header("Access-Control-Allow-Origin","*");
@@ -277,7 +371,7 @@ router.post('/addNewAppointment/', (req, res, next) => {
 
         placeholder = placeholder.replace(/,\s*$/, ''); 
 
-        const functionName = `public.fn_appointment_new_add`;
+        const functionName = `fn_appointment_new_add`;
 
         const sql = `${functionName}(${placeholder})`;
 
