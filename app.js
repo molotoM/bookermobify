@@ -97,6 +97,33 @@ router.get('/getClientAppointments/:userId', (req, res, next) => {
 
 });
 
+//GET All CILENT CARS=========================================================================
+router.get('/clientCars/:userId', (req, res, next) => {
+
+    res.header("Access-Control-Allow-Origin","*");
+    res.header("Access-Control_Allow-Headers","Origin,X-Requested-With,Content-Type,Accept");
+
+    const functionName = `fn_view_all_client_vehicle(${req.params.userId})`;
+
+        postgres.callFnWithResultsById(functionName)  
+            .then((data) => {
+                res.status(200).json({
+                    message: 'You discovered a Car',
+                    user: data,
+                    status: true
+                });
+            })
+            .catch((error => {
+                debugger;
+                console.log(error);
+                res.status(500).json({
+                    message: 'bad Request',
+                    error: error,
+                    status: false
+                });
+            }))
+
+});
 //GET APPOINTMENTS FOR A TECHICIAN=========================================================================
 router.get('/techAppointments/:userId', (req, res, next) => {
 
@@ -124,8 +151,6 @@ router.get('/techAppointments/:userId', (req, res, next) => {
             }))
 
 });
-
-
 //GET ALL REQUESTED APPOINTMENTS=========================================================================
 router.get('/getRequestedApp', (req, res,next) => {
     res.header("Access-Control-Allow-Origin","*");
