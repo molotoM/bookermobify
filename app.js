@@ -165,7 +165,7 @@ router.get('/getUserInfo', (req, res,next) => {
     res.header("Access-Control-Allow-Origin","*");
     res.header("Access-Control_Allow-Headers","Origin,X-Requested-With,Content-Type,Accept");
 
-    const functionName = `fn_user_get_by_user_id(${req.params.userId})`;
+    const functionName = `fn_user_get_by_user_id (${req.params.userId})`;
 
         postgres.callFnWithResultsById(functionName)  
             .then((data) => {
@@ -182,7 +182,6 @@ router.get('/getUserInfo', (req, res,next) => {
                     status: false
                 });
             }))
-
 });
 //================================================================================================================
 //REGISTER USERS========================================================================================
