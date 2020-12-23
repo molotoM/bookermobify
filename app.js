@@ -403,7 +403,7 @@ router.post('/addNewAppointment/', (req, res, next) => {
         .then((data) => {
             debugger;
             res.status(201).json({
-                message: 'Successfully Added user',
+                message: 'Successfully an appointment',
                 addedUser: data
             });
             resolve(data);
