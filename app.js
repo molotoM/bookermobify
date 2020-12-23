@@ -19,7 +19,7 @@ router.get('/getUserId/:userId', (req, res, next) => {
     res.header("Access-Control-Allow-Origin","*");
     res.header("Access-Control_Allow-Headers","Origin,X-Requested-With,Content-Type,Accept");
 
-    const functionName = `public.fn_vehicle_get_by_id (${req.params.userId})`;
+    const functionName = `fn_vehicle_get_by_id (${req.params.userId})`;
 
         postgres.callFnWithResultsById(functionName)  
             .then((data) => {
