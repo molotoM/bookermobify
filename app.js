@@ -161,7 +161,7 @@ router.get('/getRequestedApp', (req, res,next) => {
 });
 
 //GET ALL LOGGED IN USER INFORMATION =========================================================================
-router.get('/getUserInfo', (req, res,next) => {
+router.get('/getUserInfo/:userId', (req, res,next) => {
     res.header("Access-Control-Allow-Origin","*");
     res.header("Access-Control_Allow-Headers","Origin,X-Requested-With,Content-Type,Accept");
 
